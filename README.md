@@ -1,11 +1,11 @@
 # CharToROM
 A project aimed at making programming Terraria XOR based ROM easy as 123.
 
-This project was aimed at making the programming of a ROM designed by @yfdyzjt much easier. Bellow is the process of how to manually decode the inputs based on 15 values. 
+This project was aimed at making the programming of a ROM designed by @yfdyzjt much easier. Below is the process of how to manually decode the inputs based on 15 values. 
 
 ![image](https://github.com/RussDev7/CharToROM/assets/33048298/88686ad0-7c33-468b-96f3-5db51f3eb039)
 
-This uses a truth table that follows the XOR format as seen bellow.
+This uses a truth table that follows the XOR format as seen below.
 
 ![TruthTable](https://github.com/RussDev7/CharToROM/assets/33048298/29b1057f-78a9-4206-87c7-d0a00e7cbb84)
 
@@ -17,7 +17,7 @@ However doing this is very time consuming and prone to human error. So I created
 
 ![RomDemo1](https://github.com/RussDev7/CharToROM/assets/33048298/933c2f74-5fda-4d7f-a56f-d344b3a9340a)
 
-From here a quick copy and paste of the wires into the ROM using TEdit will allow ready to use storage. Bellow I will be providing the code needed to upload the ROM data in-game using commands.
+From here a quick copy and paste of the wires into the ROM using TEdit will allow ready to use storage. Below I will be providing the code needed to upload the ROM data in-game using commands.
 
 Entree point:
 `Terraria.Chat > ChatCommandProcessor (OR CreateOutgoingMessage)`
@@ -33,26 +33,26 @@ using Terraria.Localization;
 
 namespace Terraria.Chat
 {
-	public partial class ChatCommandProcessor : IChatProcessor
-	{
-		public void ProcessIncomingMessage(ChatMessage message, int clientId)
-		{
-			if (message.Text.Contains("/rom"))
+    public partial class ChatCommandProcessor : IChatProcessor
+    {
+        public void ProcessIncomingMessage(ChatMessage message, int clientId)
+        {
+            if (message.Text.Contains("/rom"))
             {
                 string SchemName = "";
                 int RunBy = 0;
                 string Message = message.Text;
-				Vector2 playerPosition = Main.LocalPlayer.position / 16;
-				Vector2 wirePosition = Main.LocalPlayer.position / 16;
-				int WireColor = 1;
+                Vector2 playerPosition = Main.LocalPlayer.position / 16;
+                Vector2 wirePosition = Main.LocalPlayer.position / 16;
+                int WireColor = 1; // Change to 2 if you want the first frame to be empty.
 
                 try
                 {
-				    // Create a new list of words based on a sentences spaces.
+                    // Create a new list of words based on a sentences spaces.
                     List<string> wordList = Message.TrimStart(new char[]{' '}).Split(new char[]{' '}).ToList<string>();
                     wordList.RemoveAt(0); // Remove the first word -> /schem.
-					
-					// Define variables based on the list of words.
+                    
+                    // Define variables based on the list of words.
                     foreach (string OutString in string.Join(" ", wordList.ToArray()).Split(new char[]{' '}))
                     {
                         if (RunBy == 0) // Define the first variable.
@@ -74,68 +74,68 @@ namespace Terraria.Chat
                         {
                             foreach (string OutString in File.ReadLines(@"C:\Program Files (x86)\Steam\steamapps\common\Terraria\#romupload\" + SchemName + ".txt"))
                             {
-								// Remove all spaces in each line, Get Each Char In Each Line.
-						        foreach (char c in OutString.Replace(" ", ""))
-						        {
-								    // Check if value is 0 or 1.
-									if (int.Parse(c.ToString()) == 1)
-									{
-										// Get the wire color.
-										if (WireColor == 1)
-										{
-											// Place wire.
-									        WorldGen.PlaceWire((int)wirePosition.X, (int)wirePosition.Y);
+                                // Remove all spaces in each line, Get Each Char In Each Line.
+                                foreach (char c in OutString.Replace(" ", ""))
+                                {
+                                    // Check if value is 0 or 1.
+                                    if (int.Parse(c.ToString()) == 1)
+                                    {
+                                        // Get the wire color.
+                                        if (WireColor == 1)
+                                        {
+                                            // Place wire.
+                                            WorldGen.PlaceWire((int)wirePosition.X, (int)wirePosition.Y);
 
-											// Paint all for visual.
-											Main.tile[(int)wirePosition.X, (int)wirePosition.Y].wallColor(25);
-										}
-										else if (WireColor == 2)
-										{
-											// Place wire.
-									        WorldGen.PlaceWire2((int)wirePosition.X, (int)wirePosition.Y);
+                                            // Paint all for visual.
+                                            Main.tile[(int)wirePosition.X, (int)wirePosition.Y].wallColor(25);
+                                        }
+                                        else if (WireColor == 2)
+                                        {
+                                            // Place wire.
+                                            WorldGen.PlaceWire2((int)wirePosition.X, (int)wirePosition.Y);
 
-											// Paint all for visual.
-											Main.tile[(int)wirePosition.X, (int)wirePosition.Y].wallColor(25);
-										}
-										else if (WireColor == 3)
-										{
-											// Place wire.
-									        WorldGen.PlaceWire3((int)wirePosition.X, (int)wirePosition.Y);
+                                            // Paint all for visual.
+                                            Main.tile[(int)wirePosition.X, (int)wirePosition.Y].wallColor(25);
+                                        }
+                                        else if (WireColor == 3)
+                                        {
+                                            // Place wire.
+                                            WorldGen.PlaceWire3((int)wirePosition.X, (int)wirePosition.Y);
 
-											// Paint all for visual.
-											Main.tile[(int)wirePosition.X, (int)wirePosition.Y].wallColor(25);
-										}
-										else if (WireColor == 4)
-										{
-											// Place wire.
-									        WorldGen.PlaceWire4((int)wirePosition.X, (int)wirePosition.Y);
+                                            // Paint all for visual.
+                                            Main.tile[(int)wirePosition.X, (int)wirePosition.Y].wallColor(25);
+                                        }
+                                        else if (WireColor == 4)
+                                        {
+                                            // Place wire.
+                                            WorldGen.PlaceWire4((int)wirePosition.X, (int)wirePosition.Y);
 
-											// Paint all for visual.
-											Main.tile[(int)wirePosition.X, (int)wirePosition.Y].wallColor(25);
-										}
-									}
+                                            // Paint all for visual.
+                                            Main.tile[(int)wirePosition.X, (int)wirePosition.Y].wallColor(25);
+                                        }
+                                    }
 
-									// Progress position left.
-								    wirePosition.X += 1;
-								}
+                                    // Progress position left.
+                                    wirePosition.X += 1;
+                                }
 
-								// Reset horizontal postion.
-								wirePosition.X = playerPosition.X;
+                                // Reset horizontal postion.
+                                wirePosition.X = playerPosition.X;
 
-								// Progress wire color.
-								if (WireColor == 4)
-								{
-									// Reset wirecolor back to 1.
-									WireColor = 1;
+                                // Progress wire color.
+                                if (WireColor == 4)
+                                {
+                                    // Reset wirecolor back to 1.
+                                    WireColor = 1;
 
-									// Progress position down.
-								    wirePosition.Y += 3;
-								}
-								else
-								{
-									WireColor++;
-								}
-							}
+                                    // Progress position down.
+                                    wirePosition.Y += 3;
+                                }
+                                else
+                                {
+                                    WireColor++;
+                                }
+                            }
 
                             // Display Console
                             Console.WriteLine(string.Concat(new string[]{"Schematic: ", SchemName.ToString(), " has loaded successfully!"}));
@@ -160,20 +160,20 @@ namespace Terraria.Chat
                 return;
             }
 
-			IChatCommand chatCommand;
-			if (this._commands.TryGetValue(message.CommandId, out chatCommand))
-			{
-				chatCommand.ProcessIncomingMessage(message.Text, (byte)clientId);
-				message.Consume();
-				return;
-			}
-			if (this._defaultCommand != null)
-			{
-				this._defaultCommand.ProcessIncomingMessage(message.Text, (byte)clientId);
-				message.Consume();
-			}
-		}
-	}
+            IChatCommand chatCommand;
+            if (this._commands.TryGetValue(message.CommandId, out chatCommand))
+            {
+                chatCommand.ProcessIncomingMessage(message.Text, (byte)clientId);
+                message.Consume();
+                return;
+            }
+            if (this._defaultCommand != null)
+            {
+                this._defaultCommand.ProcessIncomingMessage(message.Text, (byte)clientId);
+                message.Consume();
+            }
+        }
+    }
 }
 ```
 
